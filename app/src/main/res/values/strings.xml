@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Test</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="name_string_resource">Nombre</string>
+    <string name="last_name_string_resource">Apellido</string>
+    <string name="age_string_resource">Age</string>
+    <string name="dni_string_resource">DNI</string>
+    <string name="save_person_button">Guardar usuario</string>
+</resources>
