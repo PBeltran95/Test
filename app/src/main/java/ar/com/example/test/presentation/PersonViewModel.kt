@@ -14,9 +14,24 @@ const val DNI_NORMAL_LENGTH = 8
 class PersonViewModel @Inject constructor(private val repo: PersonRepo) : ViewModel() {
 
 
-    fun savePerson(person: Person){
-        viewModelScope.launch(Dispatchers.IO) {
-            repo.savePerson(person)
+    private val _dataBaseIsFull = MutableLiveData<Boolean>()
+    val dataBaseIsFull: LiveData<Boolean>
+        get() = _dataBaseIsFull
+
+    fun checkDB(person: Person){
+        viewModelScope.launch(Dispatchers.Main) {
+            if (repo.getCountEntries() == 5){
+                _dataBaseIsFull.value = true
+            }else {
+                _dataBaseIsFull.value = false
+                savePerson(person)
+            }
+        }
+    }
+
+    private fun savePerson(person: Person) {
+    viewModelScope.launch(Dispatchers.IO) {
+        repo.savePerson(person)
         }
     }
 
@@ -24,14 +39,20 @@ class PersonViewModel @Inject constructor(private val repo: PersonRepo) : ViewMo
         emit(repo.getAllPersons())
     }
 
-    private val _enableButtons = MutableLiveData(false)
-    val enableButtons: LiveData<Boolean>
+    private val _fieldsAreValid = MutableLiveData<Boolean>()
+    val fieldsAreValid: LiveData<Boolean>
         get() =
-            _enableButtons
+            _fieldsAreValid
+
+    private val _ageIsValid = MutableLiveData<Boolean>()
+    val ageIsValid: LiveData<Boolean>
+        get() = _ageIsValid
 
     fun validateFields(name: String, lastName: String, age: String, dni: String) {
-
-        _enableButtons.value = name.isNotEmpty() && lastName.isNotEmpty() && age.toIntOrNull() in 21..60 && dni.isNotEmpty() && dni.length == DNI_NORMAL_LENGTH
+        if (age.isNotEmpty()){
+            _ageIsValid.value = age.toIntOrNull() in 21..50
+        }
+        _fieldsAreValid.value = name.isNotEmpty() && lastName.isNotEmpty() && _ageIsValid.value == true && dni.isNotEmpty() && dni.length == DNI_NORMAL_LENGTH
     }
 
 }

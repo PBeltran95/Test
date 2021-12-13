@@ -8,4 +8,6 @@ interface PersonRepo {
 
     suspend fun getAllPersons():List<Person>
 
+    suspend fun getCountEntries():Int
+
 }

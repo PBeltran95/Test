@@ -15,4 +15,7 @@ interface PersonDao {
     @Query("SELECT * FROM person")
     suspend fun getAllPersons(): List<Person>
 
+    @Query("SELECT COUNT(*) FROM person")
+    suspend fun countEntries(): Int
+
 }

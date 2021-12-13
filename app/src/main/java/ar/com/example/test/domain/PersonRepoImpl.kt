@@ -10,4 +10,6 @@ class PersonRepoImpl @Inject constructor(private val dao: PersonDao): PersonRepo
     }
 
     override suspend fun getAllPersons(): List<Person> = dao.getAllPersons()
+
+    override suspend fun getCountEntries(): Int  = dao.countEntries()
 }
